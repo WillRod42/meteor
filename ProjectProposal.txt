@@ -1,0 +1,27 @@
+Group Members: Billy, Jin, Justin, Will
+INFO 201 Section A/AA
+Project Proposal
+
+Project Description:
+
+The data set we are working with is downloaded from NASA's Data Portal, and the data is based on data from The Meteoritical Society's Meteoritical Bulletin Database. The Meteoritical Society collects data on meteorites that have fallen to Earth from outer space. This dataset includes the location, mass, composition, and fall year for over 45,000 meteorites that have struck our planet. I personally found the data set on the internet from kaggle.com. 
+
+The target audience for our project will be people who are interested in general/casual astronomy. The dataset contains simple/easy to understand information so the audience can have a wide range of prior knowledge on astronomy and still understand the data and find it interesting. 
+
+Three specific questions the project will answer are:
+How often/when do meteorites strike the earth?
+Where on the earth are meteorites landing?
+What type of meteorites are striking the earth?
+
+
+Technical Description:
+
+The final format of our project will ideally be a simple shiny app with a multiple different kinds of charts to display the data. The location of meteorite landings an the type of meteorites will likely be static charts, on the other hand we have plans to display the data containing when each meteorite struck the earth in a dynamic chart.
+
+
+The data is a static .csv file. Reviews on kaggle.com described some discrepancies in the data, we will have to do some data-wrangling to make sure that doesn’t affect our charts when we visualize the data. However the dataset is simple and in a straightforward format, there is only 10 column and each column is clearly described in the dataset description.  This makes the dataset easy to work with and allows us to do minimal data-wrangling in regards to reshaping/reformatting the data. 
+
+
+What (major/new) libraries will be using in this project (no need to list common libraries that are used in many projects such as dplyr)
+What questions, if any, will you be answering with statistical analysis/machine learning?
+What major challenges do you anticipate? 
