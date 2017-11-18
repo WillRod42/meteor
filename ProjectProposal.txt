@@ -18,10 +18,10 @@ Technical Description:
 
 The final format of our project will ideally be a simple shiny app with a multiple different kinds of charts to display the data. The location of meteorite landings an the type of meteorites will likely be static charts, on the other hand we have plans to display the data containing when each meteorite struck the earth in a dynamic chart.
 
-
 The data is a static .csv file. Reviews on kaggle.com described some discrepancies in the data, we will have to do some data-wrangling to make sure that doesn’t affect our charts when we visualize the data. However the dataset is simple and in a straightforward format, there is only 10 column and each column is clearly described in the dataset description.  This makes the dataset easy to work with and allows us to do minimal data-wrangling in regards to reshaping/reformatting the data. 
 
+We will using the shiny library so we can create a shiny app. We will most likely use plotly to chart our functions since we are more familiar with it, but we are also considering using ggplot2. 
 
-What (major/new) libraries will be using in this project (no need to list common libraries that are used in many projects such as dplyr)
-What questions, if any, will you be answering with statistical analysis/machine learning?
-What major challenges do you anticipate? 
+I don’t believe at the moment we will be answering any questions with statistical analysis/machine learning.
+
+I currently don’t anticipate any major challenges. Creating a dynamic chart could be time consuming, but I don’t believe it will become a major challenge. If challenges do come up we will try and make sure to document it through an issue on GitHub.
