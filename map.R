@@ -28,6 +28,6 @@ g <- list(
 map <- plot_geo(meteor.data) %>%  
   layout(title = "Where Meteor's Land", geo = g) %>%  
   add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
-              text = ~paste("Date: ", year, "</br></br>", "Name of Meteor: ", name, "</br>Size: ", mass..g.),
+              text = ~paste("Date: ", year, "</br></br>", "Name of Meteor: ", name, "</br>Size: ", mass),
               marker = list(color = 'rgb(126, 41, 162)')
   )
