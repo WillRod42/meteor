@@ -16,7 +16,8 @@ meteorite.data <- dataset %>%
   filter(year>=860 & year<=2016) %>% # filter out weird years
   filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) # filter out weird locations
 
-
+unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
+  
 shinyServer(function(input, output) {
     
   output$map <- renderPlotly({
