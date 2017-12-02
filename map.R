@@ -4,7 +4,11 @@ library(dplyr)
 library(tidyr)
 
 #setwd("~/Desktop/meteor")
-data <- read.csv("./data/meteorite-landings.csv")
+dataset <- read.csv("./data/meteorite-landings.csv")
+
+meteor.data <- dataset %>%
+  filter(year>=860 & year<=2016) %>% # filter out weird years
+  filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) # filter out weird locations 
 
 g <- list(
   scope = 'world',
