@@ -1,4 +1,5 @@
 library(shiny)
+library(plotly)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -9,14 +10,15 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      sliderInput("year.range",
-                  "Time Span (years)",
-                  min = 860,
-                  max = 2016,
-                  value = c(860, 2016)),
-      dateRangeInput("years", label = h3("Time Span in Years (860-2016)"),
-                     start = "0860-01-01", end = "2016-01-01", format = "yyyy",
-                     startview = "year")
+      
+      numericInput("min", label = h3("Lower Range (year)"), value = 860),
+      numericInput("max", label = h3("Upper Range (year)"), value = 2016)
+      
+      #sliderInput("range",
+       #           "Time Span (years)",
+        #          min = 860,
+         #         max = 2016,
+          #        value = c(860, 2016))
     ),
     
     # Show a plot of the generated distribution
