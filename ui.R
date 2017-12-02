@@ -11,8 +11,10 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      numericInput("min", label = h3("Lower Range (year)"), value = 860),
-      numericInput("max", label = h3("Upper Range (year)"), value = 2016)
+      numericInput("min", label = h3("Lower Range (year)"), value = 860, 
+                   min = 860, max = 2016),
+      numericInput("max", label = h3("Upper Range (year)"), value = 2016, 
+                   min = 860, max = 2016)
       
       #sliderInput("range",
        #           "Time Span (years)",

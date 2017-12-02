@@ -42,9 +42,9 @@ shinyServer(function(input, output) {
     )
     
     return(plot_geo(filter.by.year) %>%  
-      layout(title = "Where Meteor's Land", geo = g) %>%  
+      layout(title = "Where Meteorite's Land", geo = g) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
-                  text = ~paste("Date: ", year, "</br></br>", "Name of Meteor: ",
+                  text = ~paste("Date: ", year, "</br></br>", "Name of Meteorite: ",
                                 name, "</br>Size: ", mass),
                   marker = list(color = "rgb(126, 41, 162)")
       ))
