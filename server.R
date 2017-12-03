@@ -16,12 +16,13 @@ meteorite.data <- dataset %>%
   filter(year>=860 & year<=2016) %>% # filter out weird years
   filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) # filter out weird locations
 
-
+unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
+  
 shinyServer(function(input, output) {
     
   output$map <- renderPlotly({
     
-    filter.by.year <- meteorite.data %>%
+    filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
     #filter.by.year <- test.data %>%
@@ -41,12 +42,12 @@ shinyServer(function(input, output) {
       projection = list(type = "mercator")
     )
     
-    return(plot_geo(filter.by.year) %>%  
-      layout(title = "Where Meteorite's Land", geo = g) %>%  
+    return(plot_geo(unique.data) %>%  
+      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 700, height = 600) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
-                  text = ~paste("Date: ", year, "</br></br>", "Name of Meteorite: ",
-                                name, "</br>Size: ", mass),
-                  marker = list(color = "rgb(126, 41, 162)")
+                  text = ~paste("Date: ", year, "</br></br>",  "Class of Meteorite: ",
+                                recclass,"</br>Size: ", mass),
+                  marker = list(color = "rgb(126, 41, 162)", size = 3)
       ))
     
   })
