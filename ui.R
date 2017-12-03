@@ -2,32 +2,47 @@ library(shiny)
 library(plotly)
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(
+shinyUI(navbarPage(
+  #Application title
+  "Meteorite Landings",
   
-  # Application title
-  titlePanel("Meteorite Landings"),
-  
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-      
-      numericInput("min", label = h3("Lower Range (year)"), value = 860, 
-                   min = 860, max = 2013),
-      numericInput("max", label = h3("Upper Range (year)"), value = 2013, 
-                   min = 860, max = 2013),
-      
-      #sliderInput("range",
-       #           "Time Span (years)",
-        #          min = 860,
-         #         max = 2016,
-          #        value = c(860, 2016))
-      
-      plotOutput("ring.chart")
-    ),
+  tabPanel("Map",
+    # Page title
+    titlePanel("Interactive Map"),
     
-    # Show a plot of the generated distribution
-    mainPanel(
-       plotlyOutput("map")
+    # Sidebar with a slider input for number of bins 
+    sidebarLayout(
+      sidebarPanel(
+        
+        numericInput("min", label = h3("Lower Range (year)"), value = 860, 
+                     min = 860, max = 2013),
+        numericInput("max", label = h3("Upper Range (year)"), value = 2013, 
+                     min = 860, max = 2013),
+        
+        plotOutput("ring.chart")
+      ),
+      
+      # Show a plot of the generated distribution
+      mainPanel(
+         plotlyOutput("map")
+      )
+    )  
+  ),
+  
+  tabPanel("Charts",
+    #Page Title       
+    "Charts",
+    
+    sidebarLayout(
+      sidebarPanel(
+        selectInput("select.column",
+                    h3("Select data"),
+                    choices = list(discovery = "fall", condition = "nametype", year = "year"),
+                    selected = "fall")
+      ),
+      mainPanel(
+        plotOutput("ring.chart")
+      )
     )
   )
 ))
