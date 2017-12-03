@@ -42,7 +42,7 @@ shinyServer(function(input, output) {
       projection = list(type = "mercator")
     )
     
-    return(plot_geo(unique.data) %>%  
+    return(plot_geo(filter.by.year) %>%  
       layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 700, height = 600) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
                   text = ~paste("Date: ", year, "</br></br>",  "Class of Meteorite: ",
