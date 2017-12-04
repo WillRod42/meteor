@@ -5,9 +5,12 @@ library(plotly)
 library(dplyr)
 library(tidyr)
 
-# set my working directory as needed
+# set my working directory as needed.
 #setwd("~/Desktop/meteor")
-Sys.setlocale('LC_ALL','C') 
+
+# set locale as needed.
+#Sys.setlocale('LC_ALL','C') 
+
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv")
 
@@ -19,39 +22,40 @@ meteorite.data <- dataset %>%
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
   
 shinyServer(function(input, output) {
-    
+  
   output$map <- renderPlotly({
     
+    # Create an interactive map with the given data.
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
-    #filter.by.year <- test.data %>%
-     # filter(year >= as.numeric(input$range[[1]]) & year <= as.numeric(input$range[[2]]))
-  
     g <- list(
       scope = "world",
       showland = TRUE,
-      landcolor = toRGB("grey83"),
+      landcolor = "rgb(230, 230, 230)",
       subunitcolor = toRGB("black"),
       countrycolor = "rgb(124, 106, 132)",
       showlakes = TRUE,
-      lakecolor = toRGB("white"),
+      lakecolor = "rgb(128, 191, 255)",
+      showocean = TRUE,
+      oceancolor = "rgb(128, 191, 255)",
       showsubunits = TRUE,
       showcountries = TRUE,
       resolution = 50,
       projection = list(type = "mercator")
     )
     
-    return(plot_geo(filter.by.year, width = 800, height = 600) %>%  
+    return(plot_geo(filter.by.year, width = 900, height = 750) %>%  
       layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
                   text = ~paste("Date: ", year, "</br></br>",  "Meteorite Name: ",
                                 name,"</br>Size: ", mass),
-                  marker = list(color = "rgb(126, 41, 162)", size = 3)
+                  marker = list(color = "rgb(82, 0, 102)", size = 3)
       ))
     
   })
   
+  # Create a ring chart with the given data.
   output$ring.chart <- renderPlot({
     meteor.type <- meteorite.data %>% 
       select_(input$select.column) %>% 
