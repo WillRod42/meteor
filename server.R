@@ -43,7 +43,7 @@ shinyServer(function(input, output) {
     )
     
     return(plot_geo(filter.by.year) %>%  
-      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 700, height = 600) %>%  
+      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 800, height = 600) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
                   text = ~paste("Date: ", year, "</br></br>",  "Class of Meteorite: ",
                                 recclass,"</br>Size: ", mass),
@@ -53,7 +53,7 @@ shinyServer(function(input, output) {
   })
   
   output$ring.chart <- renderPlot({
-    meteor.type <- meteor.data %>% 
+    meteor.type <- meteorite.data %>% 
       select_(input$select.column) %>% 
       group_by_(input$select.column) %>% 
       summarize(count = n())

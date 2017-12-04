@@ -17,9 +17,7 @@ shinyUI(navbarPage(
         numericInput("min", label = h3("Lower Range (year)"), value = 860, 
                      min = 860, max = 2013),
         numericInput("max", label = h3("Upper Range (year)"), value = 2013, 
-                     min = 860, max = 2013),
-        
-        plotOutput("ring.chart")
+                     min = 860, max = 2013)
       ),
       
       # Show a plot of the generated distribution
