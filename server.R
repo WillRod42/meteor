@@ -7,7 +7,7 @@ library(tidyr)
 
 # set my working directory as needed
 #setwd("~/Desktop/meteor")
-
+Sys.setlocale('LC_ALL','C') 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv")
 
@@ -42,11 +42,11 @@ shinyServer(function(input, output) {
       projection = list(type = "mercator")
     )
     
-    return(plot_geo(filter.by.year) %>%  
-      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 800, height = 600) %>%  
+    return(plot_geo(filter.by.year, width = 800, height = 600) %>%  
+      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE) %>%  
       add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
-                  text = ~paste("Date: ", year, "</br></br>",  "Class of Meteorite: ",
-                                recclass,"</br>Size: ", mass),
+                  text = ~paste("Date: ", year, "</br></br>",  "Meteorite Name: ",
+                                name,"</br>Size: ", mass),
                   marker = list(color = "rgb(126, 41, 162)", size = 3)
       ))
     
