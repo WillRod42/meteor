@@ -1,17 +1,12 @@
 # load required packages
 library(shiny)
-library(ggplot2)
 library(plotly)
 library(dplyr)
-library(tidyr)
 
 #include other necessary files
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
-
-# set my working directory as needed
-#setwd("~/Desktop/meteor")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv")
@@ -25,12 +20,12 @@ meteorite.data <- dataset %>%
 clean.data <- CleanMeteorData(meteorite.data) %>% 
                 select(-recclass)
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
-  
 
 
 shinyServer(function(input, output) {
   output$map <- renderPlotly({
     
+    # Create an interactive map with the given data.
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
@@ -39,8 +34,9 @@ shinyServer(function(input, output) {
       return()
   })
   
+  # Create a ring chart with the given data.
   output$ring.chart <- renderPlot({
-    meteor.type <- clean.data %>% 
+    meteor.type <- clean.data %>%
       select_(input$select.column) %>% 
       group_by_(input$select.column) %>% 
       summarize(count = n())
@@ -51,5 +47,4 @@ shinyServer(function(input, output) {
       geom_histogram() 
     )  
   })
-  
 })

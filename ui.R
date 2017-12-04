@@ -10,7 +10,7 @@ shinyUI(navbarPage(
     # Page title
     titlePanel("Interactive Map"),
     
-    # Sidebar with a slider input for number of bins 
+    # Sidebar with a  2 number inputs for adjusting the year from the minimum to maximum year.
     sidebarLayout(
       sidebarPanel(
         numericInput("min", label = h3("Lower Range (year)"), value = 860, 
@@ -26,6 +26,7 @@ shinyUI(navbarPage(
     )  
   ),
   
+  # Creates a tab containing a bar graph.
   tabPanel("Charts",
     #Page Title       
     "Charts",
@@ -37,6 +38,7 @@ shinyUI(navbarPage(
                     choices = list(discovery = "fall", condition = "nametype", class = "Class"),
                     selected = "fall")
       ),
+      
       mainPanel(
         plotOutput("ring.chart")
       )
