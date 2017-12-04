@@ -5,6 +5,11 @@ library(plotly)
 library(dplyr)
 library(tidyr)
 
+#include other necessary files
+source("clean_data.R")
+source("map.R")
+source("chart_one.R")
+
 # set my working directory as needed
 #setwd("~/Desktop/meteor")
 
@@ -16,65 +21,35 @@ meteorite.data <- dataset %>%
   filter(year>=860 & year<=2016) %>% # filter out weird years
   filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) # filter out weird locations
 
+#clean data for easy use
+clean.data <- CleanMeteorData(meteorite.data) %>% 
+                select(-recclass)
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
   
+
+
 shinyServer(function(input, output) {
-    
   output$map <- renderPlotly({
     
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
-    #filter.by.year <- test.data %>%
-     # filter(year >= as.numeric(input$range[[1]]) & year <= as.numeric(input$range[[2]]))
-  
-    g <- list(
-      scope = "world",
-      showland = TRUE,
-      landcolor = toRGB("grey83"),
-      subunitcolor = toRGB("black"),
-      countrycolor = "rgb(124, 106, 132)",
-      showlakes = TRUE,
-      lakecolor = toRGB("white"),
-      showsubunits = TRUE,
-      showcountries = TRUE,
-      resolution = 50,
-      projection = list(type = "mercator")
-    )
-    
-    return(plot_geo(filter.by.year) %>%  
-      layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE, width = 700, height = 600) %>%  
-      add_markers(x = ~reclong, y = ~reclat, hoverinfo = "text",
-                  text = ~paste("Date: ", year, "</br></br>",  "Class of Meteorite: ",
-                                recclass,"</br>Size: ", mass),
-                  marker = list(color = "rgb(126, 41, 162)", size = 3)
-      ))
-    
+    CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
+              filter.by.year[, "name"], filter.by.year[, "mass"]) %>% 
+      return()
   })
   
   output$ring.chart <- renderPlot({
-    meteor.type <- meteor.data %>% 
+    meteor.type <- clean.data %>% 
       select_(input$select.column) %>% 
       group_by_(input$select.column) %>% 
       summarize(count = n())
-    
     colnames(meteor.type) <- c("type", "count")
     
-    meteor.type$fraction <- meteor.type$count / sum(meteor.type$count)
-    meteor.type <- meteor.type[order(meteor.type$fraction), ]
-    meteor.type$ymax <- cumsum(meteor.type$fraction)
-    meteor.type$ymin <- c(0, head(meteor.type$ymax, n=-1))
-    
-    return(
-      ggplot(meteor.type, aes(fill=type, ymax=ymax, ymin=ymin, xmax=4, xmin=3)) +
-      geom_rect() +
-      coord_polar(theta="y") +
-      xlim(c(0, 4)) +
-      theme(panel.grid=element_blank()) +
-      theme(axis.text=element_blank()) +
-      theme(axis.ticks=element_blank()) +
-      labs(title= paste0(meteor.type[1, "type"], " vs ", meteor.type[2, "type"]))
-    )
+    return (
+      ggplot(meteor.type, aes(x = type)) +
+      geom_histogram() 
+    )  
   })
   
 })

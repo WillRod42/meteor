@@ -13,13 +13,10 @@ shinyUI(navbarPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
       sidebarPanel(
-        
         numericInput("min", label = h3("Lower Range (year)"), value = 860, 
                      min = 860, max = 2013),
         numericInput("max", label = h3("Upper Range (year)"), value = 2013, 
-                     min = 860, max = 2013),
-        
-        plotOutput("ring.chart")
+                     min = 860, max = 2013)
       ),
       
       # Show a plot of the generated distribution
@@ -37,7 +34,7 @@ shinyUI(navbarPage(
       sidebarPanel(
         selectInput("select.column",
                     h3("Select data"),
-                    choices = list(discovery = "fall", condition = "nametype", year = "year"),
+                    choices = list(discovery = "fall", condition = "nametype", class = "Class"),
                     selected = "fall")
       ),
       mainPanel(
