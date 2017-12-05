@@ -1,3 +1,8 @@
+#Code inside the 'CleanMeteorData' function is from Kaggle user Antonio Lopez and has only been slightly modified
+#link to his Kaggle user profile: https://www.kaggle.com/antoniolopez
+#link to original source of code*: https://www.kaggle.com/antoniolopez/meteorite-landings-class-categorization
+#*code chunks 6 - 8 were used in this project (denoted by the numbers in the comments at the top of each chunk)
+
 library(readr)
 library(dplyr)
 

@@ -38,13 +38,16 @@ shinyServer(function(input, output) {
   output$ring.chart <- renderPlot({
     meteor.type <- clean.data %>%
       select_(input$select.column) %>% 
-      group_by_(input$select.column) %>% 
-      summarize(count = n())
-    colnames(meteor.type) <- c("type", "count")
+      group_by_(input$select.column) 
+    colnames(meteor.type) <- c("type")
     
-    return (
+    return(
       ggplot(meteor.type, aes(x = type)) +
-      geom_histogram() 
+      geom_bar() 
     )  
   })
 })
+
+#%>% 
+#summarize(count = n())
+#, "count")
