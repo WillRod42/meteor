@@ -6,7 +6,7 @@ shinyUI(navbarPage(
   #Application title
   "Meteorite Landings",
   
-  tabPanel("Map",
+  tabPanel("Map of Meteor Landings",
     # Page title
     titlePanel("Interactive Map"),
     
@@ -27,7 +27,7 @@ shinyUI(navbarPage(
   ),
   
   # Creates a tab containing a bar graph.
-  tabPanel("Charts",
+  tabPanel("Type of Meteors",
     #Page Title       
     "Charts",
     
@@ -40,8 +40,38 @@ shinyUI(navbarPage(
       ),
       
       mainPanel(
-        plotOutput("ring.chart")
+        plotOutput("bar.chart")
       )
     )
+  ),
+  
+  # Creates a tab containing a line graph.
+  tabPanel("Frequency of Meteor Landings",
+           #Page Title       
+           "Charts",
+           
+           sidebarLayout(
+             sidebarPanel(
+               selectInput("first_class",
+                           h3("Select First Meteor Class"),
+                           choices = list("Overview","Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
+                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
+                                          "Unknown")
+                           ),
+               
+               # Hide the second slider unless the first meteor class is not overview.
+               conditionalPanel(
+                 condition = 'input.first_class != "Overview"',
+                 selectInput("second_class",
+                           h3("Select Second Meteor Class"),
+                           choices = list("Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
+                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
+                                          "Unknown"))
+                 )
+               ),
+             mainPanel(
+               plotOutput("line.chart")
+             )
+           )
   )
 ))

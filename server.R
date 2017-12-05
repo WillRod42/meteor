@@ -3,10 +3,14 @@ library(shiny)
 library(plotly)
 library(dplyr)
 
+# supress warning messages
+suppressWarnings(warnings)
+
 #include other necessary files
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
+source("chart_two.R")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv")
@@ -34,8 +38,8 @@ shinyServer(function(input, output) {
       return()
   })
   
-  # Create a ring chart with the given data.
-  output$ring.chart <- renderPlot({
+  # Create a bar chart with the given data.
+  output$bar.chart <- renderPlot({
     meteor.type <- clean.data %>%
       select_(input$select.column) %>% 
       group_by_(input$select.column) %>% 
@@ -47,4 +51,5 @@ shinyServer(function(input, output) {
       geom_histogram() 
     )  
   })
+
 })
