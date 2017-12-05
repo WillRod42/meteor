@@ -30,7 +30,7 @@ shinyServer(function(input, output) {
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
     CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
-              filter.by.year[, "name"], filter.by.year[, "mass"]) %>% 
+              filter.by.year[, "name"], filter.by.year[, "mass"]) %>%
       return()
   })
   
