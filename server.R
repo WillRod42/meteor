@@ -3,10 +3,14 @@ library(shiny)
 library(plotly)
 library(dplyr)
 
+# supress warning messages
+suppressWarnings(warnings)
+
 #include other necessary files
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
+source("chart_two.R")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv")
@@ -30,12 +34,12 @@ shinyServer(function(input, output) {
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
     CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
-              filter.by.year[, "name"], filter.by.year[, "mass"]) %>% 
+              filter.by.year[, "name"], filter.by.year[, "mass"]) %>%
       return()
   })
   
-  # Create a ring chart with the given data.
-  output$ring.chart <- renderPlot({
+  # Create a bar chart with the given data.
+  output$bar.chart <- renderPlot({
     meteor.type <- clean.data %>%
       select_(input$select.column) %>% 
       group_by_(input$select.column) 
@@ -46,6 +50,7 @@ shinyServer(function(input, output) {
       geom_bar() 
     )  
   })
+
 })
 
 #%>% 
