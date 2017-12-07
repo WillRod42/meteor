@@ -10,8 +10,8 @@ suppressWarnings(warnings)
 # Source in necessary files
 source("clean_data.R")
 source("map.R")
-#source("chart_one.R")
-#source("chart_two.R")
+source("chart_one.R")
+source("mass_graph.R")
 source("year_graph.R")
 source("bar_chart.R")
 
@@ -25,8 +25,7 @@ meteorite.data <- dataset %>%
   CleanMeteorData() %>% 
   select(-recclass)
 
-# Clean data for more efficient use, stops the map from plotting more then one point at 
-# exactly the same location
+#filtered out repeated coordinates to render map faster
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
 
 shinyServer(function(input, output) {
@@ -35,28 +34,41 @@ shinyServer(function(input, output) {
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
-    # Create the map with only the meteorite data inside the inputted year range (inclusive)
-    CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], 
-              filter.by.year[, "year"], filter.by.year[, "name"], filter.by.year[, "mass"],
-              filter.by.year[, "Class"])
+    CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
+              filter.by.year[, "name"], filter.by.year[, "Class"]) %>%
+      return()
   })
   
-  # Create a bar chart with the selected data
+  output$freq.map <- renderPlotly({
+    CreateColorMap(countries.df)
+  })
+  
+  #Create a bar chart with the given data.
   output$bar.chart <- renderPlot({
-    meteorite.type <- meteorite.data %>%
-      select_(input$select.column) %>% 
-      group_by_(input$select.column) 
-    colnames(meteorite.type) <- c("Characteristic")
-    
-    MakeBarChart(meteorite.type)
+    meteor.type <- meteorite.data %>%
+      select_(input$select.column) %>%
+      group_by_(input$select.column)
+    colnames(meteor.type) <- c("type")
+
+    return(
+      ggplot(meteor.type, aes(x = type)) +
+      geom_bar()
+    )
   })
-  
-  # Create a point to point line graph with the selected year range
+
+  #create line graph out of time data
   output$year.graph <- renderPlot({
-    MakeYearGraph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
+      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2] )
   })
   
-  output$range <- renderPrint({
-    input$yearSlider
+  #Create mass distrubtion across different classes
+  output$mass.subgroups <- renderPlot({
+    return(masses_against_subgroups)
   })
+  
+  #Create timeline of meteorite masses classified with different subgroups
+  output$mass.year <- renderPlot({
+    masses_against_year(meteorite_with_subgroups, input$yearSliderMass[1], input$yearSliderMass[2])
+  })
+  
 })
