@@ -1,33 +1,32 @@
-# load required packages
+# Load required packages
 library(shiny)
 library(plotly)
 library(dplyr)
 library(ggplot2)
 
-
-# supress warning messages
+# Supress warning messages
 suppressWarnings(warnings)
 
-#include other necessary files
+# Source in necessary files
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
-#source("chart_two.R")
+source("chart_two.R")
 source("year_graph.R")
+source("bar_chart.R")
 
-# read in raw dataset
+# Read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
 
-# filter out incorrect data
+# Filter out incorrect data, such as weird years and weird locations
 meteorite.data <- dataset %>%
-  filter(year>=860 & year<=2016) %>% # filter out weird years
-  filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) %>% # filter out weird locations
+  filter(year>=860 & year<=2016) %>% 
+  filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) %>% 
   CleanMeteorData() %>% 
   select(-recclass)
 
 #filtered out repeated coordinates to render map faster
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
-
 
 shinyServer(function(input, output) {
   output$map <- renderPlotly({
@@ -60,5 +59,6 @@ shinyServer(function(input, output) {
   #create line graph out of time data
   output$year.graph <- renderPlot({
       make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
+
   })
 })

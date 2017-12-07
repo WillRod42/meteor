@@ -1,9 +1,11 @@
+# Load required packages
 library(shiny)
 library(plotly)
 
-# Define UI for application that draws a histogram
+# Define UI for our meteorite shiny application
 shinyUI(navbarPage(
-  #Application title
+  
+  # Application title
   "Meteorite Landings",
   
   tabPanel("Home",
@@ -35,20 +37,23 @@ shinyUI(navbarPage(
     a("https://github.com/WillRod42/meteor")
   ),
   
+  # Tab for containing the dynamic map plot
   tabPanel("Map",
     # Page title
-    titlePanel("Map of Meteor Landings"),
+    titlePanel("World Map of Meteorite Landings"),
     
-    # Sidebar with a  2 number inputs for adjusting the year from the minimum to maximum year.
+    # Sidebar that contains a two number inputs for adjusting the minimum and maximum
+    # year used in the map
     sidebarLayout(
       sidebarPanel(
-        numericInput("min", label = h3("Lower Range (year)"), value = 860, 
+        h4("Select Time Period"),
+        numericInput("min", label = h5("Lower Range (year)"), value = 860, 
                      min = 860, max = 2013),
-        numericInput("max", label = h3("Upper Range (year)"), value = 2013, 
+        numericInput("max", label = h5("Upper Range (year)"), value = 2013, 
                      min = 860, max = 2013)
       ),
       
-      # Show a plot of the generated distribution
+      # Show a world map plot with points at every meteorite location
       mainPanel(
          plotlyOutput("map")
       )
@@ -62,30 +67,42 @@ shinyUI(navbarPage(
   ),
   
   # Creates a tab containing a bar graph.
-  tabPanel("Simple Charts",
-    #Page Title       
-    "",
+  tabPanel("Analytics",
     
+    # Sidebar that contains a selectable dropdown list to change the type of data viewed
     sidebarLayout(
       sidebarPanel(
         selectInput("select.column",
-                    h3("Select data"),
-                    choices = list(discovery = "fall", condition = "nametype", class = "Class"),
-                    selected = "fall"),
-        
-        #Creates slider bar for year graph (visually simpler than input)
-        sliderInput("yearSlider", label = h3("Year Range"), min = 860, 
-                    max = 2013, value = c(860, 2013))
+                    h4("Select Data Type"),
+                    choices = list(Observed = "fall", Condition = "nametype",
+                                   Class = "Class"),
+                    selected = "fall")
       ),
       
-      
+      # Show the selected data as a bar chart
       mainPanel(
-        plotOutput("bar.chart"),
+        plotOutput("bar.chart")
+      )
+    )
+  ),
+  
+  # Tab containing the dynamic point to point line graph
+  tabPanel("# of Meteorites",
+    # Page Title       
+    titlePanel("Number of Meteorites Observed in a Time Span"),
+           
+    # Sidebar that contains a double ended slider to select a year range to be displayed
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("yearSlider", label = h4("Year Range"), min = 860, 
+                    max = 2013, value = c(860, 2013))
+      ),
+
+      # Show the point to point line graph
+      mainPanel(
         plotOutput("year.graph")
       )
     )
-    
-   
   )
   
   

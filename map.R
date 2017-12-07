@@ -1,7 +1,3 @@
-#required libraries
-library(plotly)
-library(dplyr)
-
 # Set the locale as necessary to prevent string12 error.
 Sys.setlocale('LC_ALL','C')
 
@@ -19,6 +15,7 @@ CreateMap <- function(dataset, long, lat, year, name, class) {
     projection = list(type = "mercator")
   )
   
+  # Plot the map using the inputted data
   map <- plot_geo(dataset, width = 900, height = 750) %>%  
            layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE) %>%  
            add_markers(x = long, y = lat,
