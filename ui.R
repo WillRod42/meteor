@@ -43,42 +43,21 @@ shinyUI(navbarPage(
         selectInput("select.column",
                     h3("Select data"),
                     choices = list(discovery = "fall", condition = "nametype", class = "Class"),
-                    selected = "fall")
+                    selected = "fall"),
+        
+        #Creates slider bar for year graph (visually simpler than input)
+        sliderInput("yearSlider", label = h3("Year Range"), min = 860, 
+                    max = 2013, value = c(860, 2013))
       ),
       
+      
       mainPanel(
-        plotOutput("bar.chart")
+        plotOutput("bar.chart"),
+        plotOutput("year.graph")
       )
     )
-  ),
-  
-  # Creates a tab containing a line graph.
-  tabPanel("Frequency",
-           #Page Title       
-           "Frequency of Meteor Landings",
-           
-           sidebarLayout(
-             sidebarPanel(
-               selectInput("first_class",
-                           h3("Select First Meteor Class"),
-                           choices = list("Overview","Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
-                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
-                                          "Unknown")
-                           ),
-               
-               # Hide the second slider unless the first meteor class is not overview.
-               conditionalPanel(
-                 condition = 'input.first_class != "Overview"',
-                 selectInput("second_class",
-                           h3("Select Second Meteor Class"),
-                           choices = list("Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
-                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
-                                          "Unknown"))
-                 )
-               ),
-             mainPanel(
-               plotOutput("line.chart")
-             )
-           )
+    
+   
   )
+  
 ))
