@@ -1,6 +1,7 @@
 #required libraries
 library(dplyr)
 library(ggplot2)
+library(plotly)
 library(maps)
 
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -12,4 +13,33 @@ meteor.data <- dataset %>%
 meteor.landings <- meteor.data %>% 
   select(reclat, reclong)
 
-countries <- map.where(database="world", meteor.landings$reclong, meteor.landings$reclat)
+countries <- map.where("world", meteor.landings$reclong, meteor.landings$reclat)
+
+countries.df <- data.frame(country = countries, stringsAsFactors = FALSE) %>% 
+  group_by(country) %>% 
+  filter(country != "NA") %>% 
+  summarize(count = n())
+
+CreateColorMap <- function(dataset) {
+  # thin black boundaries
+  l <- list(color = toRGB("black"), width = 0.5)
+  
+  # specify map projection/options
+  g <- list(
+    showframe = FALSE,
+    showcoastlines = TRUE,
+    projection = list(type = 'Mercator')
+  )
+  
+  p <- plot_geo(dataset, locationmode = "country names") %>%
+    add_trace(
+      z = ~count, color = ~count, colors = 'Reds',
+      text = ~country, locations = ~country, marker = list(line = l)
+    ) %>%
+    colorbar(title = 'Fequency') %>%
+    layout(
+      title = 'Meteorite Landing Frequency',
+      geo = g
+    )
+  return(p)
+}

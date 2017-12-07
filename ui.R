@@ -34,20 +34,17 @@ shinyUI(navbarPage(
   ),
   
   # Creates a tab containing a bar graph.
-  tabPanel("Simple Analysis",
+  tabPanel("Meteor Frequency",
     #Page Title       
-    "Type of Meteors",
+    "Meteorite Landings by Country",
     
     sidebarLayout(
       sidebarPanel(
-        selectInput("select.column",
-                    h3("Select data"),
-                    choices = list(discovery = "fall", condition = "nametype", class = "Class"),
-                    selected = "fall")
+        
       ),
       
       mainPanel(
-        plotOutput("bar.chart")
+        plotlyOutput("freq.map")
       )
     )
   ),

@@ -11,7 +11,7 @@ suppressWarnings(warnings)
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
-source("chart_two.R")
+#source("chart_two.R")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -23,7 +23,7 @@ meteorite.data <- dataset %>%
   CleanMeteorData() %>% 
   select(-recclass)
 
-#clean data for easy use
+#filtered out repeated coordinates to render map faster
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
 
 
@@ -34,20 +34,24 @@ shinyServer(function(input, output) {
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
     CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
-              filter.by.year[, "name"], filter.by.year[, "mass"], filter.by.year[, "Class"]) %>%
+              filter.by.year[, "name"], filter.by.year[, "Class"]) %>%
       return()
   })
   
-  # Create a bar chart with the given data.
-  output$bar.chart <- renderPlot({
-    meteor.type <- meteorite.data %>%
-      select_(input$select.column) %>% 
-      group_by_(input$select.column) 
-    colnames(meteor.type) <- c("type")
-    
-    return(
-      ggplot(meteor.type, aes(x = type)) +
-      geom_bar() 
-    )  
+  output$freq.map <- renderPlotly({
+    CreateColorMap(countries.df)
   })
+  
+  # Create a bar chart with the given data.
+  # output$bar.chart <- renderPlot({
+  #   meteor.type <- meteorite.data %>%
+  #     select_(input$select.column) %>% 
+  #     group_by_(input$select.column) 
+  #   colnames(meteor.type) <- c("type")
+  #   
+  #   return(
+  #     ggplot(meteor.type, aes(x = type)) +
+  #     geom_bar() 
+  #   )  
+  # })
 })
