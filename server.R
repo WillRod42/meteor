@@ -4,15 +4,14 @@ library(plotly)
 library(dplyr)
 library(ggplot2)
 
-
 # supress warning messages
 suppressWarnings(warnings)
 
 #include other necessary files
 source("clean_data.R")
 source("map.R")
-source("chart_one.R")
-source("chart_two.R")
+#source("chart_one.R")
+#source("chart_two.R")
 source("year_graph.R")
 
 # read in raw dataset
@@ -25,9 +24,8 @@ meteorite.data <- dataset %>%
   CleanMeteorData() %>% 
   select(-recclass)
 
-#clean data for easy use
+# clean data for easy use
 unique.data <- meteorite.data[!duplicated(meteorite.data$GeoLocation), ]
-
 
 shinyServer(function(input, output) {
   output$map <- renderPlotly({
@@ -45,17 +43,17 @@ shinyServer(function(input, output) {
     meteor.type <- meteorite.data %>%
       select_(input$select.column) %>% 
       group_by_(input$select.column) 
-    colnames(meteor.type) <- c("type")
+    colnames(meteor.type) <- c("Characteristic")
     
     return(
-      ggplot(meteor.type, aes(x = type)) +
+      ggplot(meteor.type, aes(x = Characteristic)) +
       geom_bar() 
     )  
   })
   
   #create line graph out of time data
   output$year.graph <- renderPlot({
-      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2] )
+      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
   })
   
   output$range <- renderPrint({
