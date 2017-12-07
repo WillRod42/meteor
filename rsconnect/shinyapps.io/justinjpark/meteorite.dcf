@@ -1,0 +1,12 @@
+name: meteorite
+title: Meteorite
+username:
+account: justinjpark
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 245998
+bundleId: 1121852
+url: https://justinjpark.shinyapps.io/meteorite/
+when: 1512679485.56826
+asMultiple: FALSE
+asStatic: FALSE
