@@ -50,7 +50,13 @@ shinyUI(navbarPage(
         numericInput("min", label = h5("Lower Range (year)"), value = 860, 
                      min = 860, max = 2013),
         numericInput("max", label = h5("Upper Range (year)"), value = 2013, 
-                     min = 860, max = 2013)
+                     min = 860, max = 2013),
+        selectInput("select.class",
+                    h4("Select meteor Type"),
+                    choices = list(All = "All", Ordinary.Chondrite = "Ordinary Chondrite", Carbonaceous.Chondrite = "Carbonaceous Chondrite",
+                                   Enstatite.Chondrite = "Enstatite Chondrite", Other.Chondrite = "Other Minor Condrites", Achondrites = "Achondrites", 
+                                   Stony.Iron = "Stony Iron", Iron = "Iron", Stone.Uncl = "Stone Uncl", Unknown = "Unknown"),
+                    selected = "All")
       ),
       
       # Show a world map plot with points at every meteorite location
@@ -61,10 +67,15 @@ shinyUI(navbarPage(
   ),
   
   tabPanel("Meteor Frequency",
-           plotlyOutput("freq.map"),
-           #note
-           em("*note: Antarctic data has been omitted because of the large difference in number of landings between it and the rest of the world")
-  ),
+    sidebarLayout(
+     sidebarPanel(
+       checkboxInput("checkbox", label = "Include Antarctic Data", value = FALSE)
+     ),
+       mainPanel(plotlyOutput("freq.map"))
+     ),
+     #note
+     em("*note: Antarctic data has been omitted by default because of the large difference in number of landings between it and the rest of the world")
+    ),
   
   # Creates a tab containing a bar graph.
   tabPanel("Analytics",
@@ -91,8 +102,8 @@ shinyUI(navbarPage(
       mainPanel(
         plotOutput("bar.chart"),
         plotOutput("year.graph"),
-        plotOutput("mass.subgroups"),
-        plotOutput("mass.year")
+        plotOutput("mass.year"),
+        plotOutput("mass.subgroups")
       )
     )
   )

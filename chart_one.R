@@ -28,20 +28,31 @@ countries.df <- data.frame(country = countries, stringsAsFactors = FALSE) %>%
 #filter out country subcategories because they don't work with plotly
 #filter out Antarctica to properly color map
 countries.df <- countries.df%>%
-  filter(!grepl(":", country) & country != "Antarctica")
+  filter(!grepl(":", country))
 
-CreateColorMap <- function(dataset) {
+CreateColorMap <- function(dataset, antarctica) {
+  if(!antarctica) {
+    dataset <- dataset %>%
+      filter(country != "Antarctica")
+  }
+  
   # thin black boundaries
   l <- list(color = toRGB("black"), width = 0.5)
   
   # specify map projection/options
   g <- list(
-    showframe = FALSE,
-    showcoastlines = TRUE,
-    projection = list(type = 'Mercator')
+    scope = "world",
+    showland = TRUE,
+    landcolor = "rgb(230, 230, 230)",
+    countrycolor = "rgb(124, 106, 132)",
+    showocean = TRUE,
+    oceancolor = "rgb(128, 191, 255)",
+    showcountries = TRUE,
+    
+    projection = list(type = "mercator")
   )
   
-  p <- plot_geo(dataset, locationmode = "country names") %>%
+  p <- plot_geo(dataset, locationmode = "country names", width = 900, height = 750) %>%
     add_trace(
       z = ~count, color = ~count, colors = 'Reds',
       text = ~country, locations = ~country, marker = list(line = l)

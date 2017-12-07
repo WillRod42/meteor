@@ -13,7 +13,6 @@ source("map.R")
 source("chart_one.R")
 source("mass_graph.R")
 source("year_graph.R")
-source("bar_chart.R")
 
 # Read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -34,13 +33,18 @@ shinyServer(function(input, output) {
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
+    if(input$select.class != "All") {
+      filter.by.year <- filter.by.year %>% 
+        filter(filter.by.year$Class == input$select.class)
+    }
+    
     CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
               filter.by.year[, "name"], filter.by.year[, "Class"]) %>%
       return()
   })
   
   output$freq.map <- renderPlotly({
-    CreateColorMap(countries.df)
+    CreateColorMap(countries.df, input$checkbox)
   })
   
   #Create a bar chart with the given data.
