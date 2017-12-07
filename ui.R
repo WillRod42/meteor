@@ -7,10 +7,32 @@ shinyUI(navbarPage(
   "Meteorite Landings",
   
   tabPanel("Home",
-    titlePanel("Project Overview")
+    titlePanel("Project Overview"),
     
     #vvv text below vvv
+    #purpose
+    p("The purpose of this project is to explore a dataset about meteorite landings. We wanted to take data from about ~34,000 meteorite
+      landings from 2013 to all the way back to 860, and see if we could find any interesting insights. This project was created to visually
+      show what insights we could gather from this dataset."),
     
+    #data source
+    br(), br(), br(),
+    "Our team originally found this meteorite data from the following link:", 
+    a("https://www.kaggle.com/nasa/meteorite-landings"),
+    br(),
+    "However, the original source of the data is from NASA:", 
+    a("https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh"),
+    
+    #background info
+    br(), br(),
+    p("While most of the data we work with in this app is easy to interpret, one part of the dataset is very specific to meteorites.
+      The meteorite class requires more intimate knowledge of meteorites. Here is a some reading about meteorite classes: "),
+    a("https://en.wikipedia.org/wiki/Meteorite_classification"),
+    
+    #link to github
+    br(), br(),
+    "Source code:",
+    a("https://github.com/WillRod42/meteor")
   ),
   
   tabPanel("Map",
@@ -33,49 +55,39 @@ shinyUI(navbarPage(
     )  
   ),
   
-  # Creates a tab containing a bar graph.
   tabPanel("Meteor Frequency",
+           plotlyOutput("freq.map"),
+           #note
+           em("*note: Antarctic data has been omitted because of the large difference in number of landings between it and the rest of the world")
+  ),
+  
+  # Creates a tab containing a bar graph.
+  tabPanel("Simple Charts",
     #Page Title       
-    "Meteorite Landings by Country",
+    "",
     
     sidebarLayout(
       sidebarPanel(
+        selectInput("select.column",
+                    h3("Select data"),
+                    choices = list(discovery = "fall", condition = "nametype", class = "Class"),
+                    selected = "fall"),
         
+        #Creates slider bar for year graph (visually simpler than input)
+        sliderInput("yearSlider", label = h3("Year Range"), min = 860, 
+                    max = 2013, value = c(860, 2013))
       ),
       
+      
       mainPanel(
-        plotlyOutput("freq.map")
+        plotOutput("bar.chart"),
+        plotOutput("year.graph")
       )
     )
-  ),
-  
-  # Creates a tab containing a line graph.
-  tabPanel("Frequency",
-           #Page Title       
-           "Frequency of Meteor Landings",
-           
-           sidebarLayout(
-             sidebarPanel(
-               selectInput("first_class",
-                           h3("Select First Meteor Class"),
-                           choices = list("Overview","Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
-                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
-                                          "Unknown")
-                           ),
-               
-               # Hide the second slider unless the first meteor class is not overview.
-               conditionalPanel(
-                 condition = 'input.first_class != "Overview"',
-                 selectInput("second_class",
-                           h3("Select Second Meteor Class"),
-                           choices = list("Ordinary Chondrite", "Carbonaceous Chondrite", "Enstatite Chondrite",
-                                          "Other Minor Condrites", "Achondrites", "Stony Iron", "Iron", "Stone Uncl",
-                                          "Unknown"))
-                 )
-               ),
-             mainPanel(
-               plotOutput("line.chart")
-             )
-           )
+    
+   
   )
+  
+  
+  
 ))

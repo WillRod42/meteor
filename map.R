@@ -15,15 +15,26 @@ CreateMap <- function(dataset, long, lat, year, name, class) {
     showocean = TRUE,
     oceancolor = "rgb(128, 191, 255)",
     showcountries = TRUE,
-    resolution = 50,
+    
     projection = list(type = "mercator")
   )
   
   map <- plot_geo(dataset, width = 900, height = 750) %>%  
            layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE) %>%  
-           add_markers(x = long, y = lat, hoverinfo = "text",
-                       text = paste("Date:", year), 
+           add_markers(x = long, y = lat,
+                       text = ~paste("Date: ", year),
+                       hoverinfo = "text",
                        marker = list(color = "rgb(82, 0, 102)", size = 3)
            )
+  
+  #hoverinfo bug workaround found on plotly forums#
+  map <- plotly_build(map)$x
+  l <- length(map$data)
+  for (i in 1:l) {
+    map$data[[i]]$hoverinfo <- NULL
+  }
+  map <- as_widget(map)
+  #-----------------------------------------------#
+  
   return(map)
 }

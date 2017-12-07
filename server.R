@@ -4,6 +4,7 @@ library(plotly)
 library(dplyr)
 library(ggplot2)
 
+
 # supress warning messages
 suppressWarnings(warnings)
 
@@ -12,6 +13,7 @@ source("clean_data.R")
 source("map.R")
 source("chart_one.R")
 #source("chart_two.R")
+source("year_graph.R")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -42,16 +44,21 @@ shinyServer(function(input, output) {
     CreateColorMap(countries.df)
   })
   
-  # Create a bar chart with the given data.
-  # output$bar.chart <- renderPlot({
-  #   meteor.type <- meteorite.data %>%
-  #     select_(input$select.column) %>% 
-  #     group_by_(input$select.column) 
-  #   colnames(meteor.type) <- c("type")
-  #   
-  #   return(
-  #     ggplot(meteor.type, aes(x = type)) +
-  #     geom_bar() 
-  #   )  
-  # })
+  #Create a bar chart with the given data.
+  output$bar.chart <- renderPlot({
+    meteor.type <- meteorite.data %>%
+      select_(input$select.column) %>%
+      group_by_(input$select.column)
+    colnames(meteor.type) <- c("type")
+
+    return(
+      ggplot(meteor.type, aes(x = type)) +
+      geom_bar()
+    )
+  })
+
+  #create line graph out of time data
+  output$year.graph <- renderPlot({
+      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
+  })
 })
