@@ -32,7 +32,7 @@ CreateColorMap <- function(dataset) {
       text = ~country, locations = ~country, 
       marker = list(line = list(color = toRGB("black"), width = 0.5))
     ) %>%
-    colorbar(title = 'Fequency') %>%
+    colorbar(title = 'Frequency') %>%
     layout(
       title = 'Meteorite Landing Frequency',
       geo = g
