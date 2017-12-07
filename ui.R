@@ -6,9 +6,16 @@ shinyUI(navbarPage(
   #Application title
   "Meteorite Landings",
   
-  tabPanel("Map of Meteor Landings",
+  tabPanel("Home",
+    titlePanel("Project Overview")
+    
+    #vvv text below vvv
+    
+  ),
+  
+  tabPanel("Map",
     # Page title
-    titlePanel("Interactive Map"),
+    titlePanel("Map of Meteor Landings"),
     
     # Sidebar with a  2 number inputs for adjusting the year from the minimum to maximum year.
     sidebarLayout(
@@ -27,9 +34,9 @@ shinyUI(navbarPage(
   ),
   
   # Creates a tab containing a bar graph.
-  tabPanel("Type of Meteors",
+  tabPanel("Simple Analysis",
     #Page Title       
-    "Charts",
+    "Type of Meteors",
     
     sidebarLayout(
       sidebarPanel(
@@ -46,9 +53,9 @@ shinyUI(navbarPage(
   ),
   
   # Creates a tab containing a line graph.
-  tabPanel("Frequency of Meteor Landings",
+  tabPanel("Frequency",
            #Page Title       
-           "Charts",
+           "Frequency of Meteor Landings",
            
            sidebarLayout(
              sidebarPanel(

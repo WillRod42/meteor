@@ -6,7 +6,7 @@ library(dplyr)
 Sys.setlocale('LC_ALL','C')
 
 # Create an interactive map with the given data.
-CreateMap <- function(dataset, long, lat, year, name, mass) {
+CreateMap <- function(dataset, long, lat, year, name, mass, class) {
   g <- list(
     scope = "world",
     showland = TRUE,
