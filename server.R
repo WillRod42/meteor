@@ -2,6 +2,7 @@
 library(shiny)
 library(plotly)
 library(dplyr)
+library(ggplot2)
 
 # supress warning messages
 suppressWarnings(warnings)
@@ -13,7 +14,7 @@ source("chart_one.R")
 source("chart_two.R")
 
 # read in raw dataset
-dataset <- read.csv("./data/meteorite-landings.csv")
+dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
 
 # filter out incorrect data
 meteorite.data <- dataset %>%
@@ -50,9 +51,4 @@ shinyServer(function(input, output) {
       geom_bar() 
     )  
   })
-
 })
-
-#%>% 
-#summarize(count = n())
-#, "count")
