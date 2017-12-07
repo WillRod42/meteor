@@ -47,13 +47,19 @@ shinyUI(navbarPage(
         
         #Creates slider bar for year graph (visually simpler than input)
         sliderInput("yearSlider", label = h3("Year Range"), min = 860, 
+                    max = 2013, value = c(860, 2013)),
+        
+        #Creates slider bar for year graph (visually simpler than input)
+        sliderInput("yearSliderMass", label = h3("Year Range for Mass"), min = 860, 
                     max = 2013, value = c(860, 2013))
       ),
       
       
       mainPanel(
         plotOutput("bar.chart"),
-        plotOutput("year.graph")
+        plotOutput("year.graph"),
+        plotOutput("mass.subgroups"),
+        plotOutput("mass.year")
       )
     )
     

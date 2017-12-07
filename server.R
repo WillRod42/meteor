@@ -12,7 +12,7 @@ suppressWarnings(warnings)
 source("clean_data.R")
 source("map.R")
 source("chart_one.R")
-source("chart_two.R")
+source("mass_graph.R")
 source("year_graph.R")
 
 # read in raw dataset
@@ -58,7 +58,14 @@ shinyServer(function(input, output) {
       make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2] )
   })
   
-  output$range <- renderPrint({
-    input$yearSlider
+  #Create mass distrubtion across different classes
+  output$mass.subgroups <- renderPlot({
+    return(masses_against_subgroups)
   })
+  
+  #Create timeline of meteorite masses classified with different subgroups
+  output$mass.year <- renderPlot({
+    masses_against_year(meteorite_with_subgroups, input$yearSliderMass[1], input$yearSliderMass[2])
+  })
+  
 })

@@ -51,3 +51,4 @@ CleanMeteorData <- function(meteorite.landings.clean) {
         StonyIron.DF,Iron.DF,StoneUncl.DF,Unknown.DF) %>% 
     return()
 }
+
