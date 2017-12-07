@@ -1,11 +1,11 @@
-#required libraries
+# Load required packages
 library(plotly)
 library(dplyr)
 
 # Set the locale as necessary to prevent string12 error.
 Sys.setlocale('LC_ALL','C')
 
-# Create an interactive map with the given data.
+# Create an interactive map with the inputted data.
 CreateMap <- function(dataset, long, lat, year, name, mass, class) {
   g <- list(
     scope = "world",
@@ -23,6 +23,7 @@ CreateMap <- function(dataset, long, lat, year, name, mass, class) {
     projection = list(type = "mercator")
   )
   
+  # Plot the map using the inputted data
   map <- plot_geo(dataset, width = 900, height = 750) %>%  
            layout(title = "Where Meteorite's Land", geo = g, autosize = FALSE) %>%  
            add_markers(x = long, y = lat, hoverinfo = "text",
