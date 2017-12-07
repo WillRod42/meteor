@@ -1,3 +1,6 @@
+library(plotly)
+library(dplyr)
+
 # Create an interactive map with the given data.
 CreateMap <- function(dataset, long, lat, year, name, class) {
   g <- list(

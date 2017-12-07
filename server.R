@@ -16,7 +16,6 @@ source("map.R")
 source("frequency.R")
 source("mass_graph.R")
 source("year_graph.R")
-source("bar_chart.R")
 
 # Read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -39,15 +38,20 @@ shinyServer(function(input, output) {
     # Filter data depening on inputed year range
     filter.by.year <- unique.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
+
+    if(input$select.class != "All") {
+      filter.by.year <- filter.by.year %>% 
+        filter(filter.by.year$Class == input$select.class)
+    }
     
-    # Create a map with only the meteorite data inside the inputted year range (inclusive)
-    CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"],
-              filter.by.year[, "year"], filter.by.year[, "name"], filter.by.year[, "Class"])
+    CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], filter.by.year[, "year"], 
+              filter.by.year[, "name"], filter.by.year[, "Class"]) %>%
+      return()
   })
   
   #
   output$freq.map <- renderPlotly({
-    CreateColorMap(countries.df)
+    CreateColorMap(countries.df, input$checkbox)
   })
   
   # Create a bar chart with the given data.
@@ -55,14 +59,17 @@ shinyServer(function(input, output) {
     meteorite.type <- meteorite.data %>%
       select_(input$select.column) %>%
       group_by_(input$select.column)
-    colnames(meteorite.type) <- c("Characteristic")
+    colnames(meteorite.type) <- c("type")
 
-    MakeBarChart(meteorite.type)
+    return(
+      ggplot(meteorite.type, aes(x = type)) +
+        geom_bar()
+    )
   })
 
   # Create a point to point line graph with the selected year range
   output$year.graph <- renderPlot({
-    MakeYearGraph(meteorite.data, input$yearSlider[1], input$yearSlider[2] )
+    MakeYearGraph(meteorite.data, 860, 2013)
   })
   
   # Create mass distrubtion across different classes

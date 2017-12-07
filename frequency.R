@@ -1,41 +1,66 @@
-# Select coordinates from data
-meteorite.landings <- meteorite.data %>% 
+#required libraries
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(maps)
+library(stringr)
+
+#read in raw data
+dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
+
+meteor.data <- dataset %>%
+  filter(year>=860 & year<=2016) %>% # filter out weird years
+  filter(reclong<=180 & reclong>=-180 & (reclat!=0 | reclong!=0)) # filter out weird locations 
+
+#select geo coordinates
+meteor.landings <- meteor.data %>% 
   select(reclat, reclong)
 
-# Convert latitude and longitude coordinates to location by country
-countries <- map.where("world", meteorite.landings$reclong, meteorite.landings$reclat)
+#convert geo coordinates to country
+countries <- map.where("world", meteor.landings$reclong, meteor.landings$reclat)
 
-# Count number of meteorites by country
+#count landings by country
 countries.df <- data.frame(country = countries, stringsAsFactors = FALSE) %>% 
   group_by(country) %>% 
   filter(country != "NA") %>% 
   summarize(count = n())
 
-# Filter out country subcategories because they are not necessary
-# Filter out Antarctica data to properly color map for perspective
+#filter out country subcategories because they don't work with plotly
+#filter out Antarctica to properly color map
 countries.df <- countries.df%>%
-  filter(!grepl(":", country) & country != "Antarctica")
+  filter(!grepl(":", country))
 
-
-CreateColorMap <- function(dataset) {
+CreateColorMap <- function(dataset, antarctica) {
+  if(!antarctica) {
+    dataset <- dataset %>%
+      filter(country != "Antarctica")
+  }
+  
+  # thin black boundaries
+  l <- list(color = toRGB("black"), width = 0.5)
+  
+  # specify map projection/options
   g <- list(
-    showframe = FALSE,
-    showcoastlines = TRUE,
-    projection = list(type = 'Mercator')
+    scope = "world",
+    showland = TRUE,
+    landcolor = "rgb(230, 230, 230)",
+    countrycolor = "rgb(124, 106, 132)",
+    showocean = TRUE,
+    oceancolor = "rgb(128, 191, 255)",
+    showcountries = TRUE,
+    
+    projection = list(type = "mercator")
   )
   
-  freq.map <- plot_geo(dataset, locationmode = "country names") %>%
+  p <- plot_geo(dataset, locationmode = "country names", width = 900, height = 750) %>%
     add_trace(
-      z = ~count, 
-      color = ~count, 
-      colors = 'Reds',
-      text = ~country, locations = ~country, 
-      marker = list(line = list(color = toRGB("black"), width = 0.5))
+      z = ~count, color = ~count, colors = 'Reds',
+      text = ~country, locations = ~country, marker = list(line = l)
     ) %>%
-    colorbar(title = 'Frequency') %>%
+    colorbar(title = 'Fequency') %>%
     layout(
       title = 'Meteorite Landing Frequency',
       geo = g
     )
-  return(freq.map)
+  return(p)
 }

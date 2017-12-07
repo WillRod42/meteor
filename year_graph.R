@@ -1,3 +1,6 @@
+library(dplyr)
+library(ggplot2)
+
 # Function to create and return the point to point line graph using the inputted year range
 MakeYearGraph <- function(meteorite.data, min_year, max_year) {
   meteorite.year <- meteorite.data %>% 
@@ -7,9 +10,8 @@ MakeYearGraph <- function(meteorite.data, min_year, max_year) {
   
   return(
     ggplot(meteorite.year, aes(x = year, y = count)) + 
-    geom_line(color = "#660066") +
-    geom_point(color = "#FF8000") +
-    labs(x = "Year", y = "Count")
-    )
+      geom_line(color = "#660066") +
+      geom_point(color = "#FF8000") +
+      labs(x = "Year", y = "Count")
+  )
 }
-

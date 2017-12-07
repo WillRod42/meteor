@@ -53,7 +53,13 @@ shinyUI(navbarPage(
         numericInput("min", label = h5("Lower Range (year)"), value = 860, 
                      min = 860, max = 2013),
         numericInput("max", label = h5("Upper Range (year)"), value = 2013, 
-                     min = 860, max = 2013)
+                     min = 860, max = 2013),
+        selectInput("select.class",
+                    h4("Select meteor Type"),
+                    choices = list(All = "All", Ordinary.Chondrite = "Ordinary Chondrite", Carbonaceous.Chondrite = "Carbonaceous Chondrite",
+                                   Enstatite.Chondrite = "Enstatite Chondrite", Other.Chondrite = "Other Minor Condrites", Achondrites = "Achondrites", 
+                                   Stony.Iron = "Stony Iron", Iron = "Iron", Stone.Uncl = "Stone Uncl", Unknown = "Unknown"),
+                    selected = "All")
       ),
       
       # Show a world map plot with points at every meteorite location
@@ -64,11 +70,16 @@ shinyUI(navbarPage(
   ),
   
   tabPanel("Frequency",
-           plotlyOutput("freq.map"),
-           # Note
-           em("*note: Antarctic data has been omitted because of the large difference
+    sidebarLayout(
+     sidebarPanel(
+       checkboxInput("checkbox", label = "Include Antarctic Data", value = FALSE)
+     ),
+       mainPanel(plotlyOutput("freq.map"))
+     ),
+     #note
+    em("*note: Antarctic data has been omitted because of the large difference
               in number of landings (20161) between it and the rest of the world")
-  ),
+    ),
   
   # Tab for containing the dynamic bar graph on meteorite characteristics
   tabPanel("Types",
@@ -113,21 +124,8 @@ shinyUI(navbarPage(
            
     # Page title
     titlePanel("Number of Meteorites Observed in a Time Span"),
-    
-    sidebarLayout(
+      plotOutput("year.graph")
       
-      # Sidebar panel that contains a double ended slider to select a year range to 
-      # be displayed
-      sidebarPanel(
-        sliderInput("yearSlider", label = h4("Year Range"), min = 860,
-                    max = 2013, value = c(860, 2013))
-      ),
-             
-      # Show the point to point line graph
-      mainPanel(
-        plotOutput("year.graph")
-      )
-    )  
   ),
   
   tabPanel("Mass Analytics",
