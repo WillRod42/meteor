@@ -4,6 +4,7 @@ library(plotly)
 library(dplyr)
 library(ggplot2)
 
+
 # supress warning messages
 suppressWarnings(warnings)
 
@@ -12,6 +13,7 @@ source("clean_data.R")
 source("map.R")
 source("chart_one.R")
 source("chart_two.R")
+source("year_graph.R")
 
 # read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -49,5 +51,14 @@ shinyServer(function(input, output) {
       ggplot(meteor.type, aes(x = type)) +
       geom_bar() 
     )  
+  })
+  
+  #create line graph out of time data
+  output$year.graph <- renderPlot({
+      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2] )
+  })
+  
+  output$range <- renderPrint({
+    input$yearSlider
   })
 })

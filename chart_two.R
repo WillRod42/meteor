@@ -25,7 +25,7 @@ masses_byYear <- meteorite.data %>%
 #makes a color point map
 #graph just off mass and do a count for year 
 #Add data points to map with value affecting size
-masses_mapped <- ggplot(meteorite.dFrame) + 
+masses_mapped <- ggplot(masses_byYear) + 
   geom_point(mapping = aes(x = year, y = mass, size=mass), colour="Deep Pink", 
              fill="Pink",pch=21, size=5, alpha=I(0.7)) + 
             scale_size_continuous(range = c(0, 60000000))
