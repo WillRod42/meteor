@@ -11,8 +11,6 @@ shinyUI(navbarPage(
   tabPanel("Home",
     titlePanel("Project Overview")
     
-    #vvv text below vvv
-    
   ),
   
   # Tab for containing the dynamic map plot
