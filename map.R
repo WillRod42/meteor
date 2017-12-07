@@ -1,11 +1,7 @@
-# Load required packages
-library(plotly)
-library(dplyr)
-
 # Set the locale as necessary to prevent string12 error.
 Sys.setlocale('LC_ALL','C')
 
-# Create an interactive map with the inputted data.
+# Function to create and return an interactive map with the inputted data.
 CreateMap <- function(dataset, long, lat, year, name, mass, class) {
   g <- list(
     scope = "world",

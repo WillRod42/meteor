@@ -13,6 +13,7 @@ source("map.R")
 #source("chart_one.R")
 #source("chart_two.R")
 source("year_graph.R")
+source("bar_chart.R")
 
 # Read in raw dataset
 dataset <- read.csv("./data/meteorite-landings.csv", stringsAsFactors = FALSE)
@@ -37,28 +38,22 @@ shinyServer(function(input, output) {
     # Create the map with only the meteorite data inside the inputted year range (inclusive)
     CreateMap(filter.by.year, filter.by.year[, "reclong"], filter.by.year[, "reclat"], 
               filter.by.year[, "year"], filter.by.year[, "name"], filter.by.year[, "mass"],
-              filter.by.year[, "Class"]) %>%
-      return()
+              filter.by.year[, "Class"])
   })
   
   # Create a bar chart with the selected data
   output$bar.chart <- renderPlot({
-    meteor.type <- meteorite.data %>%
+    meteorite.type <- meteorite.data %>%
       select_(input$select.column) %>% 
       group_by_(input$select.column) 
-    colnames(meteor.type) <- c("Characteristic")
+    colnames(meteorite.type) <- c("Characteristic")
     
-    return(
-      ggplot(meteor.type, aes(x = Characteristic)) +
-        geom_bar() +
-        labs(x = "Characteristic", y = "Count") +
-        theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    )  
+    MakeBarChart(meteorite.type)
   })
   
   # Create a point to point line graph with the selected year range
   output$year.graph <- renderPlot({
-      make_year_Graph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
+    MakeYearGraph(meteorite.data, input$yearSlider[1], input$yearSlider[2])
   })
   
   output$range <- renderPrint({
