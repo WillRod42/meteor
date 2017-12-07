@@ -76,35 +76,20 @@ shinyUI(navbarPage(
                     h4("Select Data Type"),
                     choices = list(Observed = "fall", Condition = "nametype",
                                    Class = "Class"),
-                    selected = "fall")
+                    selected = "fall"),
+        sliderInput("yearSlider", label = h4("Year Range"), min = 860, 
+                    max = 2013, value = c(860, 2013))
       ),
       
       # Show the selected data as a bar chart
       mainPanel(
-        plotOutput("bar.chart")
-      )
-    )
-  ),
-  
-  # Tab containing the dynamic point to point line graph
-  tabPanel("# of Meteorites",
-    # Page Title       
-    titlePanel("Number of Meteorites Observed in a Time Span"),
-           
-    # Sidebar that contains a double ended slider to select a year range to be displayed
-    sidebarLayout(
-      sidebarPanel(
-        sliderInput("yearSlider", label = h4("Year Range"), min = 860, 
-                    max = 2013, value = c(860, 2013))
-      ),
-
-      # Show the point to point line graph
-      mainPanel(
+        plotOutput("bar.chart"),
         plotOutput("year.graph")
       )
     )
   )
   
-  
-  
-))
+
+        
+      )
+    )
