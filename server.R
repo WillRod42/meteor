@@ -22,9 +22,10 @@ shinyServer(function(input, output) {
     
   output$map <- renderPlotly({
     
-    filter.by.year <- unique.data %>%
+    filter.by.year <- meteorite.data %>%
       filter(year >= as.numeric(input$min) & year <= as.numeric(input$max))
     
+    unique.data <- filter.by.year[!duplicated(meteorite.data$GeoLocation), ]
     #filter.by.year <- test.data %>%
      # filter(year >= as.numeric(input$range[[1]]) & year <= as.numeric(input$range[[2]]))
   
